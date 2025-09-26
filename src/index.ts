@@ -1,7 +1,6 @@
 let currentInput: string = '0';
 let operator: string = '';
 let previousInput: string = '';
-let memoryValue: string = '0';
 
 function appendToDisplay(value: string): void {
     let update = false;
@@ -32,18 +31,17 @@ function updateDisplay(): void {
     display.value = currentInput;
 }
 
+let result: number=0;
+
+function memoryDisplay(): void{
+    currentInput = result.toString();
+    updateDisplay();
+}
+
 function clearDisplay(): void {
     currentInput = '0';
     operator = '';
     previousInput = '';
-    updateDisplay();
-}
-
-function memoryDisplay(): void{
-    console.log('MR pressed, memoryValue:', memoryValue);
-    currentInput = memoryValue;
-    previousInput = '';
-    operator = '';
     updateDisplay();
 }
 
@@ -60,7 +58,6 @@ function calculate(): void {
     if (previousInput !== '' && currentInput !== '0' && currentInput !== '' && operator !== '') {
         const prev = parseFloat(previousInput);
         const current = parseFloat(currentInput);
-        let result: number;
         
         switch (operator) {
             case '+':
@@ -83,8 +80,8 @@ function calculate(): void {
                 return;
         }
         
+        console.log('Resultado calculado:', result);
         currentInput = result.toString();
-        memoryValue = currentInput;
         operator = '';
         previousInput = '';
         updateDisplay();
@@ -101,10 +98,9 @@ function setupEventListeners(): void {
     
     if (buttonsContainer) {
         buttonsContainer.addEventListener('click', (event) => {
-            const target = (event.target as HTMLButtonElement).closest('button');
-            if (!target) return;
-            console.log('Clicked button:', target.textContent, 'action:', target.dataset.action, 'value:', target.dataset.value);
-            //if (target.tagName === 'BUTTON') {
+            const target = event.target as HTMLButtonElement;
+            
+            if (target.tagName === 'BUTTON') {
                 const action = target.dataset.action;
                 const value = target.dataset.value;
                 
@@ -114,12 +110,12 @@ function setupEventListeners(): void {
                     deleteLast();
                 } else if (action === 'calculate') {
                     calculate();
-                }else if (action === 'memory'){
+                } else if (action === 'MR'){
                     memoryDisplay();
                 } else if (value) {
                     appendToDisplay(value);
                 }
-            //}
+            }
         });
     }
 }

@@ -79,8 +79,3 @@ body {
 .btn.zero {
   grid-column: span 2;
 }
-
-.btn.memory {
-  background-color: #a6a6a6;
-  color: black;
-}
